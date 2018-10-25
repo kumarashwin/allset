@@ -5,13 +5,15 @@
   "dependencies": {
     "react": "^16.5.2",
     "react-dom": "^16.5.2",
-    "react-scripts-ts": "3.1.0"
+    "react-scripts-ts": "3.1.0",
+    "surge": "^0.20.1"
   },
   "scripts": {
     "start": "NODE_PATH=./ react-scripts-ts start",
     "build": "react-scripts-ts build",
     "test": "react-scripts-ts test --env=jsdom",
-    "eject": "react-scripts-ts eject"
+    "eject": "react-scripts-ts eject",
+    "surge": "cd ./build && surge"
   },
   "devDependencies": {
     "@types/jest": "^23.3.7",
