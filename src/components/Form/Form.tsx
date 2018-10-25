@@ -5,6 +5,7 @@ interface IOwnProps {
   name: string;
   disabled?: boolean;
   onSubmit: (e: any) => any;
+  className?: string;
 }
 type Props = IOwnProps;
 
@@ -23,13 +24,12 @@ export class Form extends React.PureComponent<Props> {
       children,
       disabled = false,
       onSubmit: handleSubmit,
+      className,
     } = this.props;
 
     return (
-      <form onSubmit={handleSubmit}>
+      <form className={className} onSubmit={handleSubmit}>
         {children}
-        <br />
-        <br />
         <SubmitButton disabled={disabled}/>
       </form>
     );

@@ -2,7 +2,7 @@ import * as React from 'react';
 
 interface IOption {
   text: string;
-  value: string;
+  value?: string;
 };
 
 interface IOwnProps {
@@ -10,6 +10,7 @@ interface IOwnProps {
   onChange: (e: any) => any;
   options: IOption[];
   label?: string;
+  labelClassname?: string;
 }
 type Props = IOwnProps;
 
@@ -17,13 +18,13 @@ export const DropDownInput = ({
   onChange,
   options,
   label = '',
+  labelClassname,
 }: Props) => (
   <label>
-    {label}
-    <br />
+    <span className={labelClassname}>{label}</span>
     <select onChange={onChange}>
       {options.map(({ value, text }) => (
-        <option key={value} value={value}>{text}</option>
+        <option key={value || text} value={value}>{text}</option>
       ))}
     </select>
   </label>

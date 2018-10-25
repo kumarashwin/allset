@@ -1,0 +1,94 @@
+.container {
+  max-width: 74vw;
+  margin: 0 auto;
+}
+
+.container > h1 {
+  font-size: 64px;
+  color: white;
+  margin: calc(1vh + 3vw) 0;
+}
+
+.container > h2 {
+  font-size: 24px;
+  color: lightcyan;
+  line-height: 1.5em;
+  margin: calc(1vh + 2vw) 0;
+}
+
+@media screen and (min-width: 50em) {
+  .container > h1 {
+    font-size: 8vw;
+  }
+
+  .container > h2 {
+    font-size: 3vw;
+  }
+}
+
+@media screen and (min-width: 80em) {
+  .container > h1 {
+    font-size: 104px;
+    margin: 44px 0;
+  }
+
+  .container > h2 {
+    font-size: 38px;
+    margin: 32px 0;
+  }
+}
+
+.ageGenderForm {
+  width: 100%;
+  padding: 15px 0;
+}
+
+.ageGenderForm > * {
+  margin: 2vh 0;
+}
+
+.ageGenderForm > label {
+  display: block;
+  margin: 20px 0; 
+  max-width: 440px;
+}
+
+.inputLabel {
+  display: block;
+  color: lightcyan;
+  font-size: 16px;
+  font-weight: 600;
+  margin: 5px 0; 
+}
+
+.ageGenderForm input, 
+.ageGenderForm select {
+  width: 100%;
+  min-height: 30px;
+}
+
+
+.ageGenderForm input[type=email] {
+  max-width: 440px;
+  min-height: 24px;
+  border-width: 0;
+  padding: 3px 0;
+}
+
+.ageGenderForm input[type=submit] {
+  max-width: 440px;
+  min-height: 42px;
+  border-width: 0;
+  color: white;
+  background-color: darkcyan;
+  padding: 3px 0;
+}
+
+.ageGenderForm input[type=submit]:hover {
+  cursor: pointer;
+}
+
+.ageGenderForm input[type=submit]:disabled {
+  cursor: auto;
+  opacity: 0.3;
+}

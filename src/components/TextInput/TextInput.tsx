@@ -11,7 +11,6 @@ type Props = IOwnProps;
 export const TextInput = ({ name, label = '', value = '', onChange }: Props) => (
   <label>
     {label}
-    <br />
     <input type="text" {...{ name, value, onChange }} />
   </label>
 );

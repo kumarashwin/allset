@@ -11,7 +11,6 @@ type Props = IOwnProps;
 export const NumberInput = ({ name, label = '', value = '', onChange }: Props) => (
   <label>
     {label}
-    <br />
     <input type="number" {...{ name, value, onChange }} />
   </label>
 );

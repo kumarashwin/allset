@@ -6,6 +6,8 @@ import { EmailInput } from 'src/components/EmailInput/EmailInput';
 import { Form } from 'src/components/Form/Form'
 import { isEmailValid } from 'src/utils';
 
+import './AgeGenderForm.css';
+
 const yearRange = Array.from(new Array(111), (x, i) => 2010 - i);
 const rangeWithValues = yearRange.map(year => ({ text: String(year), value: String(year) }));
 
@@ -29,42 +31,36 @@ export class AgeGenderForm extends React.PureComponent<Props, IOwnState> {
   public state: IOwnState = {
     isDisabled: true,
   };
-  
-  public handleOnEmailChange = Form.handlerWrapper((event: any) => {
-    this.setState({ email: event.target.value });
-  });
-  
-  public handleOnYearChange = Form.handlerWrapper((event: any) => {
-    this.setState({ year: event.target.value });
-  });
-  
-  
-  public handleOnGenderChange = Form.handlerWrapper((event: any) => {
-    const gender = event.target.value;
-    if (gender !== 'blank') {
-      this.setState({
-        gender: event.target.value,
-        isDisabled: false
-      });
+
+  public handleOnEmailChange = Form.handlerWrapper(async (event: any) => {
+    const email = event.target.value;
+    await this.setState({ email });
+
+    if (!email || !isEmailValid(email)) {
+      await this.setState({ isDisabled: true });
     } else {
-      this.setState({ isDisabled: true });
+      await this.shouldEnable();
     }
   });
-  
+
+  public handleOnYearChange = Form.handlerWrapper(async (event: any) => {
+    await this.setState({ year: event.target.value });
+    await this.shouldEnable();
+  });
+
+
+  public handleOnGenderChange = Form.handlerWrapper(async (event: any) => {
+    const gender = event.target.value;
+    if (gender !== 'blank') {
+      await this.setState({ gender: event.target.value });
+      await this.shouldEnable();
+    }
+  });
+
   public handleSubmit = Form.handlerWrapper(
     async () => {
       const { email, gender, year } = this.state;
 
-      // Since this is supposed to be a test, I'm
-      // not going to spend time doing further validation.
-      if(!email || !isEmailValid(email)) {
-        alert('Fix the email!');
-        return;
-      }
-
-      // In a normal scenario, I'd use a Form library
-      // for React that would do most of the validation.
-      
       const res = await Api.SubmitForm({
         name: this.name,
         payload: {
@@ -73,7 +69,7 @@ export class AgeGenderForm extends React.PureComponent<Props, IOwnState> {
           year,
         }
       });
-      
+
       // Check that the POST was succesful
       if (res) {
         const { id } = res;
@@ -86,39 +82,60 @@ export class AgeGenderForm extends React.PureComponent<Props, IOwnState> {
         })
       }
     },
-    );
-    
-    public render() {
+  );
+
+  public shouldEnable = async () => {
+    const { year, gender, email } = this.state;
+    const toEnable = [year, gender, email]
+      .map(field => !!(field && field.trim()))
+      .every(Boolean);
+
+    await this.setState({ isDisabled: !toEnable });
+  };
+
+  public render() {
     const { email, message, isDisabled } = this.state;
-    return message
-      ? <div>{message}</div>
-      : (
-        <Form name="age-gender-form" onSubmit={this.handleSubmit} disabled={isDisabled}>
-          <EmailInput
-            name="email"
-            value={email}
-            label="Please enter your email:"
-            onChange={this.handleOnEmailChange}
-          />
-          <br />
-          <DropDownInput
-            name="year"
-            label="And the year you were born:"
-            onChange={this.handleOnYearChange}
-            options={rangeWithValues}
-          />
-          <br />
-          <DropDownInput
-            name="gender"
-            label="And lastly for this part, please choose your gender:"
-            onChange={this.handleOnGenderChange}
-            options={[
-              { value: 'blank', text: ' ' },
-              { value: 'male', text: 'Male' },
-              { value: 'female', text: 'Female' }
-            ]}
-          />
-        </Form>
-      )
+    return (
+      <div className="container">
+        {message
+          ? <h2>{message}</h2>
+          : (
+            <>
+              <h1>Let's begin!</h1>
+              <h2>Here are some simple questions to get you started.</h2>
+              <Form className="ageGenderForm" name="age-gender-form" onSubmit={this.handleSubmit} disabled={isDisabled}>
+                <EmailInput
+                  name="email"
+                  value={email}
+                  label="Please enter your email:"
+                  labelClassname="inputLabel"
+                  onChange={this.handleOnEmailChange}
+                />
+                <DropDownInput
+                  name="year"
+                  label="The year you were born:"
+                  labelClassname="inputLabel"
+                  onChange={this.handleOnYearChange}
+                  options={[
+                    { value: undefined, text: ' ' },
+                    ...rangeWithValues,
+                  ]}
+                />
+                <DropDownInput
+                  name="gender"
+                  label="And lastly, please choose your gender:"
+                  labelClassname="inputLabel"
+                  onChange={this.handleOnGenderChange}
+                  options={[
+                    { value: undefined, text: ' ' },
+                    { value: 'male', text: 'Male' },
+                    { value: 'female', text: 'Female' }
+                  ]}
+                />
+              </Form>
+            </>
+          )}
+      </div>
+    )
   }
 };
